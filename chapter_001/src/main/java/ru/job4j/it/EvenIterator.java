@@ -2,7 +2,6 @@ package ru.job4j.it;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.function.Consumer;
 
 public class EvenIterator implements Iterator<Integer> {
     private int[] data;
@@ -11,16 +10,6 @@ public class EvenIterator implements Iterator<Integer> {
     public EvenIterator(int[] data) {
         this.data = data;
         this.pointer = getNextEvenIndex();
-    }
-
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void forEachRemaining(Consumer<? super Integer> action) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
