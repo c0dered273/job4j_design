@@ -83,4 +83,14 @@ public class MatrixItTest {
         assertThat(it.hasNext(), is(true));
         assertThat(it.hasNext(), is(true));
     }
+
+    @Test
+    public void whenLastEmptyThenNext() {
+        int[][] in = {
+                {1}, {}
+        };
+        MatrixIt it = new MatrixIt(in);
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(1));
+    }
 }
