@@ -57,6 +57,10 @@ public class ForwardLinked<T> implements Iterable<T> {
         return result;
     }
 
+    public int size() {
+        return size;
+    }
+
     private void checkHeadIsNull() {
         if (head == null) {
             throw new NoSuchElementException();
