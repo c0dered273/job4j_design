@@ -44,7 +44,7 @@ public class ForwardLinked<T> implements Iterable<T> {
             beforeLast.next = null;
         }
         size--;
-        modCount--;
+        modCount++;
         return lastValue;
     }
 
