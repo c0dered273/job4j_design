@@ -74,4 +74,38 @@ public class SimpleHashMapTest {
         assertThat(simpleHashMap.size(), is(48));
     }
 
+    @Test
+    public void whenAddNull() {
+        SimpleHashMap<Integer, String> simpleHashMap = new SimpleHashMap<>();
+        simpleHashMap.insert(2, "value1");
+        simpleHashMap.insert(null, "ValueNull");
+        simpleHashMap.insert(15, "value2");
+        assertThat(simpleHashMap.get(null), is("ValueNull"));
+    }
+
+    @Test
+    public void whenAddThenDeleteNull() {
+        SimpleHashMap<Integer, String> simpleHashMap = new SimpleHashMap<>();
+        simpleHashMap.insert(2, "value1");
+        simpleHashMap.insert(null, "ValueNull");
+        simpleHashMap.insert(15, "value2");
+        assertThat(simpleHashMap.delete(null), is(true));
+    }
+
+    @Test
+    public void whenGetNotExist() {
+        SimpleHashMap<Integer, String> simpleHashMap = new SimpleHashMap<>();
+        simpleHashMap.insert(2, "value1");
+        simpleHashMap.insert(15, "value2");
+        assertThat(simpleHashMap.get(23), nullValue());
+    }
+
+    @Test
+    public void whenDeleteNotExist() {
+        SimpleHashMap<Integer, String> simpleHashMap = new SimpleHashMap<>();
+        simpleHashMap.insert(2, "value1");
+        simpleHashMap.insert(15, "value2");
+        assertThat(simpleHashMap.delete(23), is(false));
+    }
+
 }

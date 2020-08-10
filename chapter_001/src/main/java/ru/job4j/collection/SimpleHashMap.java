@@ -1,9 +1,6 @@
 package ru.job4j.collection;
 
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class SimpleHashMap<K, V> implements Iterable<MapEntry<K, V>> {
     static final int DEFAULT_CAPACITY = 16;
@@ -36,29 +33,50 @@ public class SimpleHashMap<K, V> implements Iterable<MapEntry<K, V>> {
     }
 
     public V get(K key) {
-        MapEntry<K, V> result = table[indexOf(key)];
-        return result != null ? result.getValue() : null;
+        V result = null;
+        int index = indexOf(key);
+        if (table[index] != null) {
+            if (Objects.equals(key, table[index].getKey())) {
+                result = table[index].getValue();
+            }
+        }
+        return result;
     }
 
     public boolean delete(K key) {
         int index = indexOf(key);
-        if (table[index] == null) {
-            return false;
+        if (table[index] != null) {
+            if (Objects.equals(key, table[index].getKey())) {
+                table[index] = null;
+                --size;
+                ++modCount;
+                return true;
+            }
         }
-        table[index] = null;
-        --size;
-        ++modCount;
-        return true;
+        return false;
     }
 
     public int size() {
         return size;
     }
 
+    @SuppressWarnings("unchecked")
     private void resize() {
-        capacity = capacity << 1;
+        Node<K, V>[] oldTable = table;
+        int oldCap = capacity;
+        int newCap = capacity << 1;
+        table = (Node<K, V>[]) new Node[newCap];
+        Node<K, V> e;
+        for (int i = 0; i < oldCap; i++) {
+            if ((e = oldTable[i]) != null) {
+                oldTable[i] = null;
+                int newIndex = indexOf(e.getKey());
+                table[newIndex] = e;
+            }
+        }
+        capacity = newCap;
         threshold = threshold << 1;
-        table = Arrays.copyOf(table, capacity);
+        ++modCount;
     }
 
     private int hash(Object key) {
