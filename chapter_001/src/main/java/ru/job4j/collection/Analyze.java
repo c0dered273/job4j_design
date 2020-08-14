@@ -1,6 +1,8 @@
 package ru.job4j.collection;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -8,19 +10,19 @@ public class Analyze {
 
     public Info diff(List<User> previous, List<User> current) {
         Info result = new Info();
+        Map<Integer, User> prevMap = previous.stream().collect(Collectors.toMap(e -> e.id, e -> e));
         result.deleted = previous.size();
         for (User cur : current) {
             boolean isAdded = true;
-            for (User prev : previous) {
-                if (Objects.equals(cur, prev)) {
-                    isAdded = false;
-                    result.deleted--;
-                }
-                if (Objects.equals(cur, prev) && !Objects.equals(cur.name, prev.name)) {
+            User prev = prevMap.get(cur.id);
+            if (prev != null) {
+                if (!cur.name.equals(prev.name)) {
                     result.changed++;
                 }
+                isAdded = false;
+                result.deleted--;
             }
-            if (isAdded) ++result.added;
+            if (isAdded) result.added++;
         }
         return result;
     }
