@@ -16,6 +16,9 @@ public class AnalyzeTest {
     Analyze.User user35 = new Analyze.User();
     Analyze.User user4 = new Analyze.User();
     Analyze.User user5 = new Analyze.User();
+    Analyze.User user6 = new Analyze.User();
+    List<Analyze.User> previous = new ArrayList<>();
+    List<Analyze.User> current = new ArrayList<>();
 
     @Before
     public void init() {
@@ -31,20 +34,25 @@ public class AnalyzeTest {
         user4.name = "User4";
         user5.id = 555;
         user5.name = "User5";
+        user6.id = 666;
+        user6.name = "User6";
+        previous.add(user1);
+        previous.add(user2);
+        previous.add(user3);
+        previous.add(user4);
+        current.add(user1);
+        current.add(user2);
+        current.add(user35);
+        current.add(user5);
+        current.add(user6);
     }
 
     @Test
     public void addDiff() {
         Analyze analyze = new Analyze();
-        List<Analyze.User> previous = new ArrayList<>();
-        List<Analyze.User> current = new ArrayList<>();
-        previous.add(user1);
-        previous.add(user2);
-        current.add(user1);
-        current.add(user2);
-        current.add(user3);
         List<Analyze.User> expect = new ArrayList<>();
-        expect.add(user3);
+        expect.add(user5);
+        expect.add(user6);
         List<Analyze.User> result = analyze.addDiff(previous, current);
         assertThat(result, is(expect));
     }
@@ -52,15 +60,8 @@ public class AnalyzeTest {
     @Test
     public void deleteDiff() {
         Analyze analyze = new Analyze();
-        List<Analyze.User> previous = new ArrayList<>();
-        List<Analyze.User> current = new ArrayList<>();
-        previous.add(user1);
-        previous.add(user2);
-        previous.add(user3);
-        current.add(user1);
-        current.add(user3);
         List<Analyze.User> expect = new ArrayList<>();
-        expect.add(user2);
+        expect.add(user4);
         List<Analyze.User> result = analyze.deleteDiff(previous, current);
         assertThat(result, is(expect));
     }
@@ -68,13 +69,6 @@ public class AnalyzeTest {
     @Test
     public void modDiff() {
         Analyze analyze = new Analyze();
-        List<Analyze.User> previous = new ArrayList<>();
-        List<Analyze.User> current = new ArrayList<>();
-        previous.add(user1);
-        previous.add(user3);
-        current.add(user1);
-        current.add(user2);
-        current.add(user35);
         List<Analyze.User> expect = new ArrayList<>();
         expect.add(user35);
         List<Analyze.User> result = analyze.modDiff(previous, current);
@@ -84,18 +78,8 @@ public class AnalyzeTest {
     @Test
     public void whenDiff() {
         Analyze analyze = new Analyze();
-        List<Analyze.User> previous = new ArrayList<>();
-        List<Analyze.User> current = new ArrayList<>();
         Analyze.Info expect = new Analyze.Info();
-        previous.add(user1);
-        previous.add(user2);
-        previous.add(user3);
-        previous.add(user4);
-        current.add(user1);
-        current.add(user2);
-        current.add(user35);
-        current.add(user5);
-        expect.added = 1;
+        expect.added = 2;
         expect.deleted = 1;
         expect.changed = 1;
         assertThat(analyze.diff(previous, current), is(expect));

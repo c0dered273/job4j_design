@@ -8,9 +8,20 @@ public class Analyze {
 
     public Info diff(List<User> previous, List<User> current) {
         Info result = new Info();
-        result.added = addDiff(previous, current).size();
-        result.deleted = deleteDiff(previous, current).size();
-        result.changed = modDiff(previous, current).size();
+        result.deleted = previous.size();
+        for (User cur : current) {
+            boolean isAdded = true;
+            for (User prev : previous) {
+                if (Objects.equals(cur, prev)) {
+                    isAdded = false;
+                    result.deleted--;
+                }
+                if (Objects.equals(cur, prev) && !Objects.equals(cur.name, prev.name)) {
+                    result.changed++;
+                }
+            }
+            if (isAdded) ++result.added;
+        }
         return result;
     }
 
