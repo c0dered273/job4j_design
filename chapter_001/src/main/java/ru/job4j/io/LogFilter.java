@@ -3,24 +3,19 @@ package ru.job4j.io;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LogFilter {
     private static final String errorCode = "404";
 
     public static List<String> filter(String file) {
-        List<String> lines = new ArrayList<>();
         List<String> rsl = new ArrayList<>();
         try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-            in.lines().forEach(lines::add);
+            rsl = in.lines().filter(LogFilter::checkCode)
+                    .map(l -> l + System.lineSeparator())
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        for (String line : lines) {
-            int endInd = line.lastIndexOf(" ");
-            int startInd = endInd - 3;
-            if (line.substring(startInd, endInd).equals(errorCode)) {
-                rsl.add(line);
-            }
         }
         return rsl;
     }
@@ -34,6 +29,12 @@ public class LogFilter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static boolean checkCode(String line) {
+        int endInd = line.lastIndexOf(" ");
+        int startInd = endInd - 3;
+        return line.substring(startInd, endInd).equals(errorCode);
     }
 
     public static void main(String[] args) {
