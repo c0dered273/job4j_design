@@ -20,21 +20,21 @@ public class AnalizyTest {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
-    @Test
-    public void whenSelectUnavailable() {
-        Analizy analizy = new Analizy();
-        List<String> expect = new ArrayList<>();
-        expect.add("10:58:01;10:59:01");
-        expect.add("11:01:02;11:02:02");
-        List<String> result = new ArrayList<>();
-        analizy.unavailable("server.log", "unavailable.log");
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get("unavailable.log"))) {
-            reader.lines().forEach(result::add);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assertThat(result, is(expect));
-    }
+//    @Test
+//    public void whenSelectUnavailable() {
+//        Analizy analizy = new Analizy();
+//        List<String> expect = new ArrayList<>();
+//        expect.add("10:58:01;10:59:01");
+//        expect.add("11:01:02;11:02:02");
+//        List<String> result = new ArrayList<>();
+//        analizy.unavailable("server.log", "unavailable.log");
+//        try (BufferedReader reader = Files.newBufferedReader(Paths.get("unavailable.log"))) {
+//            reader.lines().forEach(result::add);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        assertThat(result, is(expect));
+//    }
 
     @Test
     public void whenTestWithTempFolder() throws IOException {
