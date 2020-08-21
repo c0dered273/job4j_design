@@ -44,13 +44,20 @@
     <module>chapter_004</module>
     <module>chapter_005</module>
   </modules>
-  
+  <!--
   <build>
     <plugins>
       <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-checkstyle-plugin</artifactId>
       <version>3.1.1</version>
+      <dependencies>
+        <dependency>
+          <groupId>com.puppycrawl.tools</groupId>
+          <artifactId>checkstyle</artifactId>
+          <version>8.35</version>
+        </dependency>
+      </dependencies>
       <configuration>
         <configLocation>checkstyle.xml</configLocation>
         <encoding>UTF-8</encoding>
@@ -70,5 +77,5 @@
     </plugin>
     </plugins>  
   </build>
-    
+    -->
 </project>
