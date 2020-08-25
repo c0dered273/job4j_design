@@ -39,7 +39,7 @@ public class Zip {
         if (exclude.isEmpty()) {
             predicate = p -> true;
         } else {
-            predicate = p -> p.toFile().getName().endsWith(exclude);
+            predicate = p -> !p.toFile().getName().endsWith(exclude);
         }
         SearchFiles searchFiles = new SearchFiles(predicate);
         Files.walkFileTree(Path.of(dirName), searchFiles);
