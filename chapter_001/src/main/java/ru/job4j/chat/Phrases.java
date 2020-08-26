@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.StringJoiner;
 
 public class Phrases implements PhraseGenerator {
-    private List<String> lines;
+    private final List<String> lines;
 
     public Phrases(List<String> lines) {
         this.lines = lines;

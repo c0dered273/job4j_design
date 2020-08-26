@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,26 +32,22 @@ public class ChatCycleTest {
     }
 
     @Test
-    public void whenStartChat() {
-        UserInput userInput = new StubInput(Arrays.asList("привет", "пока", "закончить"));
-        PhraseGenerator phrases = new StubPhrases(Arrays.asList("phrase1", "phrase2"));
-        StubLogger logger = new StubLogger();
-        ChatCycle chat = new ChatCycle(userInput, phrases, logger);
-        chat.startChat();
-        List<String> result = logger.getList();
-        List<String> expect = Arrays.asList("I: привет", "Bot: phrase1", "I: пока", "Bot: phrase2", "I: закончить");
-        assertThat(result, is(expect));
-    }
-
-    @Test
-    public void whenStopAnswer() {
+    public void whenChat() throws NoSuchFieldException, IllegalAccessException {
         UserInput userInput = new StubInput(Arrays.asList("привет", "стоп", "продолжить", "закончить"));
         PhraseGenerator phrases = new StubPhrases(Arrays.asList("phrase1", "phrase2"));
         StubLogger logger = new StubLogger();
         ChatCycle chat = new ChatCycle(userInput, phrases, logger);
         chat.startChat();
+        Field uName = chat.getClass().getDeclaredField("USER_NAME");
+        uName.setAccessible(true);
+        String userName = (String) uName.get(chat);
+        Field bName = chat.getClass().getDeclaredField("BOT_NAME");
+        bName.setAccessible(true);
+        String botName = (String) bName.get(chat);
         List<String> result = logger.getList();
-        List<String> expect = Arrays.asList("I: привет", "Bot: phrase1", "I: стоп", "I: продолжить", "Bot: phrase2", "I: закончить");
+        List<String> expect = Arrays.asList(userName + "привет", botName + "phrase1",
+                userName + "стоп", userName + "продолжить",
+                botName + "phrase2", userName + "закончить");
         assertThat(result, is(expect));
     }
 
@@ -71,11 +68,11 @@ public class ChatCycleTest {
     @Test
     public void whenWriteLog() throws IOException {
         List<String> expect = Arrays.asList("Phrase1", "Phrase2", "Phrase3");
+        List<String> expectWrite = Arrays.asList("Phrase1" + System.lineSeparator(),
+                "Phrase2" + System.lineSeparator(),
+                "Phrase3" + System.lineSeparator());
         FileWriter fileWriter = new FileWriter(log.toPath());
-        for (String line : expect) {
-            fileWriter.writeLine(line);
-            fileWriter.writeLine(System.lineSeparator());
-        }
+        fileWriter.writeLines(expectWrite);
         List<String> result = new ArrayList<>();
         try (BufferedReader reader = Files.newBufferedReader(log.toPath())) {
             reader.lines().forEach(result::add);
@@ -92,7 +89,7 @@ public class ChatCycleTest {
         }
 
         @Override
-        public String readLine() throws IOException {
+        public String readLine() {
             if (cursor >= questions.size()) cursor = 0;
             return questions.get(cursor++);
         }
@@ -117,8 +114,13 @@ public class ChatCycleTest {
         private final List<String> output = new ArrayList<>();
 
         @Override
-        public void writeLine(String line, boolean isConsoleOut) throws IOException {
+        public void logLine(String line, boolean isConsoleOut) {
             output.add(line);
+        }
+
+        @Override
+        public void writeLogToFile() {
+
         }
 
         public List<String> getList() {

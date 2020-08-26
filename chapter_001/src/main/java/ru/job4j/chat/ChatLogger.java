@@ -3,8 +3,9 @@ package ru.job4j.chat;
 import java.io.IOException;
 
 public interface ChatLogger {
-    default void writeLine(String line) throws IOException {
-        writeLine(line, true);
+    default void logLine(String line) {
+        logLine(line, true);
     }
-    void writeLine(String line, boolean isConsole) throws IOException;
+    void logLine(String line, boolean isConsole);
+    void writeLogToFile() throws IOException;
 }
