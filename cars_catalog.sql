@@ -1,27 +1,28 @@
 create table body (
 	id serial primary key,
-	name varchar(255)
+	name varchar(256)
 );
 
 create table engine (
 	id serial primary key,
-	name varchar(255)
+	name varchar(256)
 );
 
 create table gearbox (
 	id serial primary key,
-	name varchar(255)
+	name varchar(256)
 );
 
 create table car (
 	id serial primary key,
-	name varchar(255),
+	name varchar(256),
 	body_id integer references body(id),
 	engine_id integer references engine(id),
 	gearbox_id integer references gearbox(id)
 );
 
 insert into body(name) values
+('2100')
 ('2101'),
 ('2106'),
 ('2109'),
@@ -34,6 +35,7 @@ insert into engine(name) values
 ('6,8');
 
 insert into gearbox(name) values
+('DSG')
 ('4stage'),
 ('5stage'),
 ('3stage');
@@ -48,3 +50,4 @@ select c.name, b.name, e.name, g.name from car as c
 left join body as b on c.body_id = b.id
 left join engine as e on c.engine_id = e.id
 left join gearbox as g on c.gearbox_id = g.id
+
