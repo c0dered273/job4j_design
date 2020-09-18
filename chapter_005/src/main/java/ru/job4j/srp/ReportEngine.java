@@ -9,11 +9,8 @@ public class ReportEngine {
         this.store = store;
     }
 
-    public String generate(Predicate<Employee> filter) {
-        return new OldReport().generate(store, filter);
-    }
-
-    public String generateNew(Predicate<Employee> filter) {
-        return new NewReport().generate(store, filter);
+    public String generate(ReportGenerator generator, Predicate<Employee> filter, ReportFormat format) {
+        Report report = generator.generate(store, filter);
+        return format.formatTo(report);
     }
 }

@@ -3,6 +3,7 @@ package ru.job4j.srp;
 import org.junit.Test;
 
 import java.util.Calendar;
+import java.util.StringJoiner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -17,14 +18,16 @@ public class ReportEngineTest {
         store.add(worker);
         ReportEngine engine = new ReportEngine(store);
         StringBuilder expect = new StringBuilder()
+                .append("OldReport")
+                .append(System.lineSeparator())
                 .append("Name; Hired; Fired; Salary;")
                 .append(System.lineSeparator())
                 .append(worker.getName()).append(";")
                 .append(worker.getHired()).append(";")
                 .append(worker.getFired()).append(";")
-                .append(worker.getSalary()).append(";")
-                .append(System.lineSeparator());
-        assertThat(engine.generate(em -> true), is(expect.toString()));
+                .append(worker.getSalary()).append(";");
+        String result = engine.generate(new OldReport(), em -> true, new PlainTextFormat());
+        assertThat(result, is(expect.toString()));
     }
 
     @Test
@@ -38,20 +41,25 @@ public class ReportEngineTest {
         store.add(worker02);
         store.add(worker03);
         ReportEngine engine = new ReportEngine(store);
-        StringBuilder expect = new StringBuilder()
-                .append("<h1>")
-                .append("Name; Salary;")
-                .append("</h1>")
-                .append(System.lineSeparator())
-                .append(worker02.getName()).append(";")
-                .append(NewReport.getTaxSalary(worker02.getSalary())).append(";")
-                .append(System.lineSeparator())
-                .append(worker03.getName()).append(";")
-                .append(NewReport.getTaxSalary(worker03.getSalary())).append(";")
-                .append(System.lineSeparator())
-                .append(worker01.getName()).append(";")
-                .append(NewReport.getTaxSalary(worker01.getSalary())).append(";")
-                .append(System.lineSeparator());
-        assertThat(engine.generateNew(em -> true), is(expect.toString()));
+        StringJoiner expect = new StringJoiner(System.lineSeparator());
+        expect.add("<html>");
+        expect.add("<body>");
+        expect.add("<h1>");
+        expect.add("NewReport");
+        expect.add("</h1>");
+        expect.add("<p>");
+        expect.add("<br>");
+        expect.add("Name; Salary;");
+        expect.add("<br>");
+        expect.add(worker02.getName() + ";" + " " + NewReport.getTaxSalary(worker02.getSalary()) + ";");
+        expect.add("<br>");
+        expect.add(worker03.getName() + ";" + " " + NewReport.getTaxSalary(worker03.getSalary()) + ";");
+        expect.add("<br>");
+        expect.add(worker01.getName() + ";" + " " + NewReport.getTaxSalary(worker01.getSalary()) + ";");
+        expect.add("</p>");
+        expect.add("</body>");
+        expect.add("</html>");
+        String result = engine.generate(new NewReport(), em -> true, new HTMLFormat());
+        assertThat(result, is(expect.toString()));
     }
 }
