@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class OldReport implements ReportGenerator {
-    private String name = "OldReport";
+public class AccountingReport implements ReportGenerator {
+    private String name = "AccountingReport";
 
-    public OldReport() {
+    public AccountingReport() {
     }
 
-    public OldReport(String name) {
+    public AccountingReport(String name) {
         this.name = name;
+    }
+
+    public static double getTaxSalary(double salary) {
+        return salary * 1.13D;
     }
 
     @Override
@@ -23,7 +27,7 @@ public class OldReport implements ReportGenerator {
             text.append(employee.getName()).append(";")
                     .append(employee.getHired()).append(";")
                     .append(employee.getFired()).append(";")
-                    .append(employee.getSalary()).append(";");
+                    .append(getTaxSalary(employee.getSalary())).append(";");
             content.add(text.toString());
         }
         return new Report(name, header, content);
