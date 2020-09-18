@@ -1,6 +1,5 @@
 package ru.job4j.srp;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 public class ReportEngine {
@@ -11,12 +10,10 @@ public class ReportEngine {
     }
 
     public String generate(Predicate<Employee> filter) {
-        OldReport oldReport = new OldReport();
-        return oldReport.generate(store, filter);
+        return new OldReport().generate(store, filter);
     }
 
     public String generateNew(Predicate<Employee> filter) {
-        NewReport newReport = new NewReport();
-        return newReport.generate(store, filter);
+        return new NewReport().generate(store, filter);
     }
 }
