@@ -1,24 +1,39 @@
 package ru.job4j.parking;
 
 public class TruckParking implements Parking {
-    private final int places;
+    private final int maxPlaces;
+    private int places;
 
     public TruckParking(int places) {
+        this.maxPlaces = places;
         this.places = places;
+
     }
 
     @Override
     public boolean place(int size) {
-        return false;
+        int newPlaces = places - size;
+        if (newPlaces > 0) {
+            places = newPlaces;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean remove(int size) {
-        return false;
+        int newPlaces = places + size;
+        if (newPlaces <= maxPlaces) {
+            places = newPlaces;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public int getFreePlaces() {
-        return 0;
+        return places;
     }
 }

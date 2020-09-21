@@ -9,6 +9,6 @@ public class Truck implements Vehicle {
 
     @Override
     public int park() {
-        return 0;
+        return size;
     }
 }

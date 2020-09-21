@@ -9,6 +9,6 @@ public class VehicleContextImpl implements VehicleContext {
 
     @Override
     public int park() {
-        return 0;
+        return vehicle.park();
     }
 }
