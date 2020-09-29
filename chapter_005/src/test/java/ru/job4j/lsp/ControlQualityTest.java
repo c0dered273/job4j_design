@@ -13,13 +13,14 @@ public class ControlQualityTest {
     private final Store wh = new Warehouse(new MemRepository());
     private final Store sh = new Shop(new MemRepository());
     private final Store tr = new Trash(new MemRepository());
+    private final List<Store> stores = List.of(wh, sh, tr);
 
     @Test
     public void whenFoodToWarehouse() {
         LocalDate prod = LocalDate.of(2020, 9, 1);
-        LocalDate exp = LocalDate.of(2020, 12, 1);
+        LocalDate exp = LocalDate.of(2021, 12, 1);
         Food bread = new Bread("bread", exp, prod, 120, 0);
-        ControlQuality controlQuality = new ControlQuality(wh, sh, tr);
+        ControlQuality controlQuality = new ControlQuality(stores);
         controlQuality.handle(bread);
         List<Food> expect = Collections.singletonList(bread);
         assertThat(wh.getFoodByName("bread"), is(expect));
@@ -30,7 +31,7 @@ public class ControlQualityTest {
         LocalDate prod = LocalDate.of(2020, 7, 1);
         LocalDate exp = LocalDate.of(2020, 12, 1);
         Food bread = new Bread("bread", exp, prod, 120, 0);
-        ControlQuality controlQuality = new ControlQuality(wh, sh, tr);
+        ControlQuality controlQuality = new ControlQuality(stores);
         controlQuality.handle(bread);
         List<Food> expect = Collections.singletonList(bread);
         assertThat(sh.getFoodByName("bread"), is(expect));
@@ -41,7 +42,7 @@ public class ControlQualityTest {
         LocalDate prod = LocalDate.of(2020, 2, 1);
         LocalDate exp = LocalDate.of(2020, 12, 1);
         Food bread = new Bread("bread", exp, prod, 120, 0);
-        ControlQuality controlQuality = new ControlQuality(wh, sh, tr);
+        ControlQuality controlQuality = new ControlQuality(stores);
         controlQuality.handle(bread);
         assertThat(sh.getFoodByName("bread").get(0).getDiscount(), is(0.5d));
     }
@@ -51,7 +52,7 @@ public class ControlQualityTest {
         LocalDate prod = LocalDate.of(2020, 1, 1);
         LocalDate exp = LocalDate.of(2020, 8, 1);
         Food bread = new Bread("bread", exp, prod, 120, 0);
-        ControlQuality controlQuality = new ControlQuality(wh, sh, tr);
+        ControlQuality controlQuality = new ControlQuality(stores);
         controlQuality.handle(bread);
         List<Food> expect = Collections.singletonList(bread);
         assertThat(tr.getFoodByName("bread"), is(expect));

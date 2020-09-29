@@ -13,6 +13,11 @@ public class MemRepository implements Repository {
     }
 
     @Override
+    public List<Food> getAll() {
+        return repo;
+    }
+
+    @Override
     public List<Food> getFoodByName(String name) {
         List<Food> rsl = new ArrayList<>();
         repo.stream()
