@@ -1,6 +1,6 @@
 package ru.job4j.parking;
 
 public interface Storage {
-    Car put(String plate, Car car);
-    Car remove(String plate);
+    Vehicle put(String plate, Vehicle vehicle);
+    Vehicle remove(String plate);
 }

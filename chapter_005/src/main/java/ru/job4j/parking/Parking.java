@@ -1,9 +1,9 @@
 package ru.job4j.parking;
 
 public interface Parking {
-    boolean add(Car car);
+    boolean add(Vehicle vehicle);
 
-    boolean remove(Car car);
+    boolean remove(Vehicle vehicle);
 
     int getFreePlace();
 }
