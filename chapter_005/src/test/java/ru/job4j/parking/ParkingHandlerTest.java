@@ -8,17 +8,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class ParkingHandlerTest {
-    Vehicle car1 = new Car("E111YT");
-    Vehicle car2 = new Car("E222YT");
-    Vehicle car3 = new Car("E333YT");
-    Vehicle truck1 = new Truck("T111PT");
-    Vehicle truck2 = new Truck("T222PT");
-    List<Vehicle> carList = List.of(car1, car2, car3);
-    List<Vehicle> truckList = List.of(truck1, truck2);
-    Storage memStore = new MemStorage();
-
     @Test
     public void whenAddCar() {
+        Storage memStore = new MemStorage();
+        Vehicle car1 = new Car("E111YT");
+        Vehicle car2 = new Car("E222YT");
+        Vehicle car3 = new Car("E333YT");
+        List<Vehicle> carList = List.of(car1, car2, car3);
         int parkingSize = 20;
         Parking parking = new MainParking(parkingSize, memStore);
         ParkingHandler handler = new ParkingHandler(parking);
@@ -28,6 +24,11 @@ public class ParkingHandlerTest {
 
     @Test
     public void whenAddOverLimit() {
+        Storage memStore = new MemStorage();
+        Vehicle car1 = new Car("E111YT");
+        Vehicle car2 = new Car("E222YT");
+        Vehicle car3 = new Car("E333YT");
+        List<Vehicle> carList = List.of(car1, car2, car3);
         int parkingSize = 2;
         Parking parking = new MainParking(parkingSize, memStore);
         ParkingHandler handler = new ParkingHandler(parking);
@@ -37,6 +38,11 @@ public class ParkingHandlerTest {
 
     @Test
     public void whenRemoveCar() {
+        Storage memStore = new MemStorage();
+        Vehicle car1 = new Car("E111YT");
+        Vehicle car2 = new Car("E222YT");
+        Vehicle car3 = new Car("E333YT");
+        List<Vehicle> carList = List.of(car1, car2, car3);
         int parkingSize = 20;
         Parking parking = new MainParking(parkingSize, memStore);
         ParkingHandler handler = new ParkingHandler(parking);
@@ -47,6 +53,14 @@ public class ParkingHandlerTest {
 
     @Test
     public void whenAddCarsAndTrucks() {
+        Storage memStore = new MemStorage();
+        Vehicle car1 = new Car("E111YT");
+        Vehicle car2 = new Car("E222YT");
+        Vehicle car3 = new Car("E333YT");
+        Vehicle truck1 = new Truck("T111PT");
+        Vehicle truck2 = new Truck("T222PT");
+        List<Vehicle> carList = List.of(car1, car2, car3);
+        List<Vehicle> truckList = List.of(truck1, truck2);
         int parkingSize = 20;
         Parking parking = new MainParking(parkingSize, memStore);
         ParkingHandler handler = new ParkingHandler(parking);
