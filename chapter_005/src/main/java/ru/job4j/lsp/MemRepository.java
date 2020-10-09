@@ -25,4 +25,9 @@ public class MemRepository implements Repository {
                 .forEach(rsl::add);
         return rsl;
     }
+
+    @Override
+    public void clearRepo() {
+        repo.clear();
+    }
 }

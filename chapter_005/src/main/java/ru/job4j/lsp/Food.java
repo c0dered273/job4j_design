@@ -7,7 +7,6 @@ public class Food {
     private String name;
     private LocalDate expireDate;
     private LocalDate createDate;
-    private double expPercent;
     private int price;
     private double discount;
 
@@ -17,7 +16,6 @@ public class Food {
         this.createDate = createDate;
         this.price = price;
         this.discount = discount;
-        this.expPercent = compExpPercent();
     }
 
     public String getName() {
@@ -34,7 +32,6 @@ public class Food {
 
     public void setExpireDate(LocalDate expireDate) {
         this.expireDate = expireDate;
-        this.expPercent = compExpPercent();
     }
 
     public LocalDate getCreateDate() {
@@ -43,7 +40,6 @@ public class Food {
 
     public void setCreateDate(LocalDate createDate) {
         this.createDate = createDate;
-        this.expPercent = compExpPercent();
     }
 
     public int getPrice() {
@@ -62,18 +58,14 @@ public class Food {
         this.discount = discount;
     }
 
-    public double getExpPercent() {
-        return expPercent;
-    }
-
-    private double compExpPercent() {
+    public double getExpPercent(LocalDate now) {
         long expFull = ChronoUnit.DAYS.between(
                 getCreateDate(),
                 getExpireDate()
         );
         long expRemaining = ChronoUnit.DAYS.between(
                 getCreateDate(),
-                LocalDate.now()
+                now
         );
         return (expRemaining / (double) expFull) * 100;
     }

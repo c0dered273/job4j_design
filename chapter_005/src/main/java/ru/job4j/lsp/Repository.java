@@ -8,4 +8,6 @@ public interface Repository {
     List<Food> getAll();
 
     List<Food> getFoodByName(String name);
+
+    void clearRepo();
 }

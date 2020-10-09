@@ -1,17 +1,25 @@
 package ru.job4j.lsp;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class Trash implements Store {
     private final Repository repo;
+    private LocalDate now;
 
     public Trash(Repository repo) {
         this.repo = repo;
+        this.now = LocalDate.now();
+    }
+
+    public Trash(Repository repo, LocalDate now) {
+        this.repo = repo;
+        this.now = now;
     }
 
     @Override
     public boolean accept(Food f) {
-        return f.getExpPercent() < 0d || f.getExpPercent() > 100d;
+        return f.getExpPercent(now) < 0d || f.getExpPercent(now) > 100d;
     }
 
     @Override
@@ -29,5 +37,15 @@ public class Trash implements Store {
     @Override
     public List<Food> getFoodByName(String name) {
         return repo.getFoodByName(name);
+    }
+
+    @Override
+    public void setNowDate(LocalDate now) {
+        this.now = now;
+    }
+
+    @Override
+    public void emptyStore() {
+        repo.clearRepo();
     }
 }
