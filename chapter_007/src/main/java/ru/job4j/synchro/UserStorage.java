@@ -33,10 +33,12 @@ public class UserStorage {
         var toUser = users.get(toId);
         if (fromUser != null && toUser != null) {
             var fromAmount = fromUser.getAmount();
-            var toAmount = toUser.getAmount();
-            fromUser.setAmount(fromAmount - amount);
-            toUser.setAmount(toAmount + amount);
-            rsl = true;
+            if (fromAmount >= amount) {
+                var toAmount = toUser.getAmount();
+                fromUser.setAmount(fromAmount - amount);
+                toUser.setAmount(toAmount + amount);
+                rsl = true;
+            }
         }
         return rsl;
     }
