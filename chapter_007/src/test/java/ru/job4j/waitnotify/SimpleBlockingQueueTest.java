@@ -11,7 +11,13 @@ public class SimpleBlockingQueueTest {
     @Test
     public void whenQueueIsEmpty() throws InterruptedException {
         SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>();
-        Thread consumer = new Thread(queue::poll);
+        Thread consumer = new Thread(() -> {
+            try {
+                queue.poll();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
         consumer.start();
         consumer.join(100);
         assertThat(consumer.getState(), is(Thread.State.WAITING));
@@ -21,7 +27,13 @@ public class SimpleBlockingQueueTest {
     public void whenReturnValueFromQueue() throws InterruptedException {
         SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>();
         Thread producer = new Thread(() -> queue.offer(42));
-        Thread consumer = new Thread(() -> retVal = queue.poll());
+        Thread consumer = new Thread(() -> {
+            try {
+                retVal = queue.poll();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
         consumer.start();
         consumer.join(100);
         producer.start();

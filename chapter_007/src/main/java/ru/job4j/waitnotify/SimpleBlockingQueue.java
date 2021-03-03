@@ -17,15 +17,11 @@ public class SimpleBlockingQueue<T> {
         this.notifyAll();
     }
 
-    public synchronized T poll() {
+    public synchronized T poll() throws InterruptedException {
         T rsl;
         while ((rsl = queue.poll()) == null) {
-            try {
-                this.wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                e.printStackTrace();
-            }
+            this.wait();
+
         }
         return rsl;
     }
