@@ -13,25 +13,25 @@ import net.jcip.annotations.ThreadSafe;
 @ThreadSafe
 public class SimpleBlockingQueue<T> {
 
-  @GuardedBy("this")
-  private final Queue<T> queue = new LinkedList<>();
+    @GuardedBy("this")
+    private final Queue<T> queue = new LinkedList<>();
 
-  public synchronized void offer(T value) {
-    queue.offer(value);
-    this.notifyAll();
-  }
-
-  /**
-   * JavaDoc.
-   *
-   * @return return
-   * @throws InterruptedException interrupt
-   */
-  public synchronized T poll() throws InterruptedException {
-    T rsl;
-    while ((rsl = queue.poll()) == null) {
-      this.wait();
+    public synchronized void offer(T value) {
+        queue.offer(value);
+        this.notifyAll();
     }
-    return rsl;
-  }
+
+    /**
+     * JavaDoc.
+     *
+     * @return return
+     * @throws InterruptedException interrupt
+     */
+    public synchronized T poll() throws InterruptedException {
+        T rsl;
+        while ((rsl = queue.poll()) == null) {
+            this.wait();
+        }
+        return rsl;
+    }
 }
