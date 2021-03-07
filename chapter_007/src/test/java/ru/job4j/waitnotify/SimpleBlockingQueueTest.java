@@ -1,12 +1,14 @@
 package ru.job4j.waitnotify;
 
 import org.junit.Test;
+import java.util.Arrays;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class SimpleBlockingQueueTest {
-    private volatile Integer retVal;
 
     @Test
     public void whenQueueIsEmpty() throws InterruptedException {
@@ -24,20 +26,33 @@ public class SimpleBlockingQueueTest {
     }
 
     @Test
-    public void whenReturnValueFromQueue() throws InterruptedException {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>();
-        Thread producer = new Thread(() -> queue.offer(42));
-        Thread consumer = new Thread(() -> {
-            try {
-                retVal = queue.poll();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-        consumer.start();
-        consumer.join(100);
+    public void whenFetchAllThenGetIt() throws InterruptedException {
+        final CopyOnWriteArrayList<Integer> buffer = new CopyOnWriteArrayList<>();
+        final SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>();
+        Thread producer = new Thread(
+                () -> {
+                    IntStream.range(0, 5).forEach(
+                            queue::offer
+                    );
+                }
+        );
         producer.start();
+        Thread consumer = new Thread(
+                () -> {
+                    while (!queue.isEmpty() || !Thread.currentThread().isInterrupted()) {
+                        try {
+                            buffer.add(queue.poll());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                }
+        );
+        consumer.start();
         producer.join();
-        assertThat(retVal, is(42));
+        consumer.interrupt();
+        consumer.join();
+        assertThat(buffer, is(Arrays.asList(0, 1, 2, 3, 4)));
     }
 }

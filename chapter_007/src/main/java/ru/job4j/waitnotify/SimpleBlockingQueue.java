@@ -33,4 +33,13 @@ public class SimpleBlockingQueue<T> {
         }
         return queue.poll();
     }
+
+    /**
+     * JavaDoc.
+     *
+     * @return return
+     */
+    public synchronized boolean isEmpty() {
+        return queue.isEmpty();
+    }
 }
