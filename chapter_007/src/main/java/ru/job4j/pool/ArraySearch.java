@@ -35,35 +35,31 @@ public class ArraySearch<T> extends RecursiveTask<Integer> {
         }
         if (array.length > 10) {
             return searchRecursive();
-        } else {
-            return searchLinear();
         }
+        return searchLinear();
     }
 
     private Integer searchLinear() {
-        int rsl = -1;
         for (int i = 0; i < array.length; i++) {
             if (array[i].equals(searchValue)) {
-                rsl = i;
-                break;
+                return i;
             }
         }
-        return rsl;
+        return -1;
     }
 
     private Integer searchRecursive() {
-        int rsl;
         if (from > to) {
-            rsl = -1;
-        } else if (array[from].equals(searchValue)) {
-            rsl = from;
-        } else if (array[to].equals(searchValue)) {
-            rsl = to;
-        } else {
-            ArraySearch<T> newSearch = new ArraySearch<>(array, searchValue, from + 1, to - 1);
-            newSearch.fork();
-            rsl = newSearch.join();
+            return -1;
         }
-        return rsl;
+        if (array[from].equals(searchValue)) {
+            return from;
+        }
+        if (array[to].equals(searchValue)) {
+            return to;
+        }
+        ArraySearch<T> newSearch = new ArraySearch<>(array, searchValue, from + 1, to - 1);
+        newSearch.fork();
+        return newSearch.join();
     }
 }
