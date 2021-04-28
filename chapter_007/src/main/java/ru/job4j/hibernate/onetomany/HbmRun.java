@@ -1,4 +1,4 @@
-package ru.job4j.hibernate;
+package ru.job4j.hibernate.onetomany;
 
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
