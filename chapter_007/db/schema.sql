@@ -17,3 +17,8 @@ CREATE TABLE IF NOT EXISTS Books(
     id SERIAL PRIMARY KEY,
     name VARCHAR
 );
+
+CREATE TABLE IF NOT EXISTS books_authors(
+    book_id INT,
+    authors_id INT
+);
